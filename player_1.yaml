@@ -1,0 +1,14 @@
+---
+# [
+#   {type: 'carrier', positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}]},
+#   {type: 'battleship', positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}]},
+#   {type: 'submarine', positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]},
+#   {type: 'cruiser', positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]},
+#   {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}]}
+# ]
+
+carrier: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}]
+battleship: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}]
+submarine: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
+cruiser: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
+destroyer: [{x: 1, y: 1}, {x: 1, y: 2}]
