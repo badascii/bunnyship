@@ -13,12 +13,7 @@ class Ship
   end
 
   def shot_hit?(grid_position)
-    positions.each do |position|
-      if position == grid_position
-        return true
-      end
-    end
-    return false
+    positions.include?(grid_position)
   end
 
   def destroyed?
