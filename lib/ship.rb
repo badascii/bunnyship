@@ -21,7 +21,7 @@ class Ship
     return false
   end
 
-  def sunk?
+  def destroyed?
     if damage == positions
       true
     else

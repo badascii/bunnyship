@@ -24,12 +24,12 @@ class ShipTest < MiniTest::Test
     assert_equal(false, @ship.shot_hit?(miss))
   end
 
-  def test_sunk
-    assert_equal(false, @ship.sunk?)
+  def test_destroyed
+    assert_equal(false, @ship.destroyed?)
 
     @ship.damage = [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
 
-    assert_equal(true, @ship.sunk?)
+    assert_equal(true, @ship.destroyed?)
   end
 
 end
