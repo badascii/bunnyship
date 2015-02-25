@@ -4,6 +4,7 @@ class Game
 
   def initialize(opts)
     @ships = opts['ships']
+    @grid  = opts['grid']
   end
 
   def valid_fleet?(player_ships)
@@ -16,4 +17,5 @@ class Game
     return false unless ships[ship[0]] == ship[1].length
     return true
   end
+
 end

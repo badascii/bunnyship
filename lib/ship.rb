@@ -1,11 +1,13 @@
+require 'set'
+
 class Ship
 
   attr_accessor :type, :positions, :damage
 
   def initialize(opts)
     @type      = opts[:type]
-    @positions = opts[:positions]
-    @damage    = opts[:damage]
+    @positions = opts[:positions].to_set
+    @damage    = opts[:damage].to_set if opts[:damage]
   end
 
   def size
@@ -13,20 +15,45 @@ class Ship
   end
 
   def shot_hit?(grid_position)
-    positions.each do |position|
-      if position == grid_position
-        return true
-      end
-    end
-    return false
+    positions.include?(grid_position)
   end
 
-  def sunk?
+  def destroyed?
     if damage == positions
       true
     else
       false
     end
+  end
+
+  def in_sequence?
+    valid_positions = Set.new
+
+    positions.each do |pos_1|
+      positions.each do |pos_2|
+        if neighboring_positions?(pos_1, pos_2)
+          valid_positions << pos_1
+        end
+      end
+    end
+    return true if valid_positions == positions
+    return false
+  end
+
+  def neighboring_positions?(pos_1, pos_2)
+    neighboring_positions_x?(pos_1, pos_2) || neighboring_positions_y?(pos_1, pos_2)
+  end
+
+  def neighboring_positions_x?(pos_1, pos_2)
+    neighbors?(pos_1[:x], pos_2[:x]) && (pos_1[:y] == pos_2[:y])
+  end
+
+  def neighboring_positions_y?(pos_1, pos_2)
+    neighbors?(pos_1[:y], pos_2[:y]) && (pos_1[:x] == pos_2[:x])
+  end
+
+  def neighbors?(pos_1, pos_2)
+    (pos_1 - 1 == pos_2) || (pos_1 + 1 == pos_2)
   end
 
 end
