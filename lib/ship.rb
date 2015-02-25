@@ -1,11 +1,13 @@
+require 'set'
+
 class Ship
 
   attr_accessor :type, :positions, :damage
 
   def initialize(opts)
     @type      = opts[:type]
-    @positions = opts[:positions]
-    @damage    = opts[:damage]
+    @positions = opts[:positions].to_set
+    @damage    = opts[:damage].to_set if opts[:damage]
   end
 
   def size
@@ -25,20 +27,32 @@ class Ship
   end
 
   def in_sequence?
-    positions.each do |position|
-      # [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 5}]
-      positions.each do |pos|
-        if pos[:x] != position[:x]
-          if (((position[:x] - 1) == pos[:x]) || ((position[:x] + 1) == pos[:x])) && ((position[:y] == pos[:y]) || (position[:y] == pos[:y]))
-            return true
-          end
+    valid_positions = Set.new
+
+    positions.each do |pos_1|
+      positions.each do |pos_2|
+        if neighboring_positions?(pos_1, pos_2)
+          valid_positions << pos_1
         end
       end
     end
+    return true if valid_positions == positions
     return false
   end
 
   def neighboring_positions?(pos_1, pos_2)
+    neighboring_positions_x?(pos_1, pos_2) || neighboring_positions_y?(pos_1, pos_2)
+  end
+
+  def neighboring_positions_x?(pos_1, pos_2)
+    neighbors?(pos_1[:x], pos_2[:x]) && (pos_1[:y] == pos_2[:y])
+  end
+
+  def neighboring_positions_y?(pos_1, pos_2)
+    neighbors?(pos_1[:y], pos_2[:y]) && (pos_1[:x] == pos_2[:x])
+  end
+
+  def neighbors?(pos_1, pos_2)
     (pos_1 - 1 == pos_2) || (pos_1 + 1 == pos_2)
   end
 

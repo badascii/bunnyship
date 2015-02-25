@@ -19,4 +19,10 @@ class GameTest < MiniTest::Test
   def test_valid_fleet
     assert_equal(true, @game.valid_fleet?(@ships))
   end
+
+  # def test_ship_not_in_sequence
+  #   ship = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 5}]}
+  #   assert_equal(false, ship.valid_ship?)
+  # end
+
 end
