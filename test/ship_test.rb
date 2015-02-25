@@ -3,6 +3,7 @@ require 'minitest/spec'
 require_relative '../lib/ship'
 
 class ShipTest < MiniTest::Test
+
   def setup
     opts = {
       type:      'cruiser',
