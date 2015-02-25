@@ -17,11 +17,7 @@ class Player
   end
 
   def active?
-    if active_ships.empty?
-      return false
-    else
-      return true
-    end
+    !active_ships.empty?
   end
 
 end

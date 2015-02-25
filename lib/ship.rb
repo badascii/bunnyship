@@ -19,11 +19,7 @@ class Ship
   end
 
   def destroyed?
-    if damage == positions
-      true
-    else
-      false
-    end
+    damage == positions
   end
 
   def in_sequence?
@@ -36,8 +32,8 @@ class Ship
         end
       end
     end
-    return true if valid_positions == positions
-    return false
+
+    valid_positions == positions
   end
 
   def neighboring_positions?(pos_1, pos_2)
