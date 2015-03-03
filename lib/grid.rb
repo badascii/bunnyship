@@ -7,4 +7,15 @@ class Grid
     @height = opts[:height] || 10
     @width  = opts[:width]  || 10
   end
+
+  def build_positions
+    pos_array = []
+    height.times do |y|
+      width.times do |x|
+        pos = { x: x + 1, y: y + 1, mark: '~'}
+        pos_array << pos
+      end
+    end
+    return pos_array
+  end
 end
