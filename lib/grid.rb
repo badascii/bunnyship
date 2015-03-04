@@ -12,8 +12,7 @@ class Grid
     pos_array = []
     height.times do |y|
       width.times do |x|
-        pos = { x: x + 1, y: y + 1, mark: '~'}
-        pos_array << pos
+        pos_array << { x: x + 1, y: y + 1, mark: '~'}
       end
     end
     return pos_array
