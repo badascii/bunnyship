@@ -27,11 +27,11 @@ class GridTest < MiniTest::Test
   end
 
   def test_build_positions
-    grid = Grid.new({ width: 2, height: 2 })
-    positions = [{ x: 1, y: 1, mark: '~' },
-                 { x: 2, y: 1, mark: '~' },
-                 { x: 1, y: 2, mark: '~' },
-                 { x: 2, y: 2, mark: '~' }]
+    grid = Grid.new(width: 2, height: 2)
+    positions = [{ x: 1, y: 1, status: '~' },
+                 { x: 2, y: 1, status: '~' },
+                 { x: 1, y: 2, status: '~' },
+                 { x: 2, y: 2, status: '~' }]
 
     assert_equal positions, grid.build_positions
   end
