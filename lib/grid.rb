@@ -12,11 +12,21 @@ class Grid
     pos_array = []
     height.times do |y|
       width.times do |x|
-        pos_array << { x: x + 1, y: y + 1, status: '~'}
+        pos_array << { x: x + 1, y: y + 1, status: '~' }
       end
     end
     return pos_array
   end
 
+  def build_output
+    output_string = ""
+
+    build_positions.each do |pos|
+      output_string += pos[:status]
+      output_string += "\n" if pos[:x] == width
+    end
+
+    return output_string
+  end
 
 end
