@@ -22,11 +22,20 @@ class Grid
     output_string = ""
 
     build_positions.each do |pos|
+      # output_string += pos[:x] if pos[:x] == 1
       output_string += pos[:status]
       output_string += "\n" if pos[:x] == width
     end
 
     return output_string
+  end
+
+  def build_x_legend
+    x_legend = ""
+
+    width.times { |x| x_legend << (x + 1).to_s }
+
+    return x_legend + "\n"
   end
 
 end

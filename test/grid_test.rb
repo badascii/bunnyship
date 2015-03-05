@@ -35,6 +35,12 @@ class GridTest < MiniTest::Test
     assert_equal positions, @grid_2x2.build_positions
   end
 
+  def test_build_x_legend
+    expected_legend = "12345678910\n"
+
+    assert_equal expected_legend, @default_grid.build_x_legend
+  end
+
   def test_build_2x2_output
     expected_string = "~~\n" * 2
 
