@@ -18,11 +18,11 @@ class Grid
     return pos_array
   end
 
-  def build_output
+  def build_rows
     output_string = ""
 
     build_positions.each do |pos|
-      # output_string += pos[:x] if pos[:x] == 1
+      output_string += pos[:y].to_s if pos[:x] == 1
       output_string += pos[:status]
       output_string += "\n" if pos[:x] == width
     end
@@ -36,6 +36,10 @@ class Grid
     width.times { |x| x_legend << (x + 1).to_s }
 
     return x_legend + "\n"
+  end
+
+  def build_complete_grid
+    build_x_legend + build_rows
   end
 
 end

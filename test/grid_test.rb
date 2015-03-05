@@ -42,15 +42,27 @@ class GridTest < MiniTest::Test
   end
 
   def test_build_2x2_output
-    expected_string = "~~\n" * 2
+    expected_string = ""
 
-    assert_equal expected_string, @grid_2x2.build_output
+    2.times { |y| expected_string += "#{y + 1}~~\n" }
+
+    assert_equal expected_string, @grid_2x2.build_rows
   end
 
   def test_build_10x10_output
-    expected_string = "~~~~~~~~~~\n" * 10
+    expected_string = ""
 
-    assert_equal expected_string, @default_grid.build_output
+    10.times { |y| expected_string += "#{y + 1}~~~~~~~~~~\n" }
+
+    assert_equal expected_string, @default_grid.build_rows
+  end
+
+  def test_build_complete_grid
+    expected_string = "12345678910\n"
+
+    10.times { |y| expected_string += "#{y + 1}~~~~~~~~~~\n" }
+
+    assert_equal expected_string, @default_grid.build_complete_grid
   end
 
 end
