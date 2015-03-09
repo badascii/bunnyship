@@ -1,9 +1,16 @@
 class Player
 
-  def initialize(opts)
-    @name  = opts[:name]
-    @ships = opts[:ships]
-    @turn  = opts[:turn]
+  attr_accessor :name, :ships, :misses_against
+
+  def initialize(opts={})
+    @name  = opts[:name] || 'Jimmy Bob'
+    @ships = opts[:ships] || []
+
+    if opts[:misses_against]
+      @misses_against = opts[:misses_against].to_set
+    else
+      @misses_against = Set.new
+    end
   end
 
   def active_ships
