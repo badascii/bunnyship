@@ -7,7 +7,11 @@ class Ship
   def initialize(opts)
     @type      = opts[:type]
     @positions = opts[:positions].to_set
-    @damage    = opts[:damage].to_set if opts[:damage]
+    if opts[:damage]
+      @damage = opts[:damage].to_set
+    else
+      @damage = Set.new
+    end
   end
 
   def size
