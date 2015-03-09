@@ -8,14 +8,15 @@ class Grid
     @width  = opts[:width]  || 10
   end
 
-  def build_positions
-    pos_array = []
-    height.times do |y|
-      width.times do |x|
-        pos_array << { x: x + 1, y: y + 1, status: '~' }
+  def positions
+    height_array = (1..height).to_a
+    width_array = (1..width).to_a
+
+    height_array.each do |y|
+      width_array.each do |x|
+        yield({ x: x, y: y })
       end
     end
-    return pos_array
   end
 
 end
