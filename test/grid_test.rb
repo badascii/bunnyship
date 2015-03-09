@@ -54,6 +54,7 @@ class GridTest < MiniTest::Test
 
     10.times { |y| expected_string += "#{y + 1}~~~~~~~~~~\n" }
 
+    @default_grid.build_rows
     assert_equal expected_string, @default_grid.build_rows
   end
 
@@ -62,6 +63,7 @@ class GridTest < MiniTest::Test
 
     10.times { |y| expected_string += "#{y + 1}~~~~~~~~~~\n" }
 
+    puts @default_grid.build_complete_grid
     assert_equal expected_string, @default_grid.build_complete_grid
   end
 
