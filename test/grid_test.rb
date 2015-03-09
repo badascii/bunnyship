@@ -37,4 +37,12 @@ class GridTest < MiniTest::Test
     assert_equal expected_positions, actual_positions
   end
 
+  def test_row
+    assert_equal [1, 2], @grid_2x2.row
+  end
+
+  def test_column
+    assert_equal [1, 2], @grid_2x2.column
+  end
+
 end
