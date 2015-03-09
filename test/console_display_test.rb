@@ -26,7 +26,7 @@ class ConsoleDisplayTest < MiniTest::Test
   def test_build_2x2_output
     console_opts    = {grid: @grid_2x2, player: @player}
     console_2x2     = ConsoleDisplay.new(console_opts)
-    expected_string = "1~~\n2~~\n"
+    expected_string = "~~1\n~~2\n"
 
     assert_equal expected_string, console_2x2.build_all_rows
   end
@@ -34,7 +34,7 @@ class ConsoleDisplayTest < MiniTest::Test
   def test_build_10x10_output
     expected_string = ""
 
-    10.times { |y| expected_string += "#{y + 1}~~~~~~~~~~\n" }
+    10.times { |y| expected_string += "~~~~~~~~~~#{y + 1}\n" }
 
     assert_equal expected_string, @console_display.build_all_rows
   end
@@ -42,7 +42,7 @@ class ConsoleDisplayTest < MiniTest::Test
   def test_build_complete_grid
     expected_string = "12345678910\n"
 
-    10.times { |y| expected_string += "#{y + 1}~~~~~~~~~~\n" }
+    10.times { |y| expected_string += "~~~~~~~~~~#{y + 1}\n" }
 
     assert_equal expected_string, @console_display.build_complete_grid
   end
@@ -53,7 +53,7 @@ class ConsoleDisplayTest < MiniTest::Test
     occupied = 'D'
     empty    = '~'
 
-    opts     = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}], damage: [{x:1, y: 1}]}
+    opts     = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}], damage: [{x: 1, y: 1}]}
     ship     = Ship.new(opts)
 
     @player.ships << ship

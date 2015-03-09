@@ -9,9 +9,8 @@ class ConsoleDisplay
 
   def build_row(position)
     output_string  = ""
-    output_string += position[:y].to_s if position[:x] == 1
     output_string += get_status(position)
-    output_string += "\n" if position[:x] == grid.width
+    output_string += "#{position[:y]}\n" if position[:x] == grid.width
 
     return output_string
   end
