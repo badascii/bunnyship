@@ -9,14 +9,19 @@ class Grid
   end
 
   def positions
-    height_array = (1..height).to_a
-    width_array = (1..width).to_a
-
-    height_array.each do |y|
-      width_array.each do |x|
+    column.each do |y|
+      row.each do |x|
         yield({ x: x, y: y })
       end
     end
+  end
+
+  def row
+    (1..width).to_a
+  end
+
+  def column
+    (1..height).to_a
   end
 
 end
