@@ -48,12 +48,13 @@ class ConsoleDisplayTest < MiniTest::Test
   end
 
   def test_get_status
-    hit       = '*'
-    miss      = '!'
-    occupied  =  'S'
-    empty     = '~'
-    ship_opts = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}], damage: [{x:1, y: 1}]}
-    ship      = Ship.new(ship_opts)
+    hit      = '*'
+    miss     = '!'
+    occupied = 'D'
+    empty    = '~'
+
+    opts     = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}], damage: [{x:1, y: 1}]}
+    ship     = Ship.new(opts)
 
     @player.ships << ship
     @player.misses_against << {x: 3, y: 3}
@@ -62,6 +63,19 @@ class ConsoleDisplayTest < MiniTest::Test
     assert_equal miss, @console_display.get_status(x: 3, y: 3)
     assert_equal occupied, @console_display.get_status(x: 1, y: 2)
     assert_equal empty, @console_display.get_status(x: 4, y: 1)
+  end
+
+  def test_display_battleship
+    opts = {type: 'battleship', positions: [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1}, {x: 5, y: 1}]}
+    ship = Ship.new(opts)
+
+    @player.ships << ship
+
+    assert_equal 'B', @console_display.get_status({x: 1, y: 1})
+    assert_equal 'B', @console_display.get_status({x: 2, y: 1})
+    assert_equal 'B', @console_display.get_status({x: 3, y: 1})
+    assert_equal 'B', @console_display.get_status({x: 4, y: 1})
+    assert_equal 'B', @console_display.get_status({x: 5, y: 1})
   end
 
 end

@@ -33,7 +33,7 @@ class ConsoleDisplay
       if ship.damage.include?(position)
         return '*'
       elsif ship.positions.include?(position)
-        return 'S'
+        return ship.type[0].upcase
       end
     end
 
