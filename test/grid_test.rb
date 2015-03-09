@@ -26,13 +26,15 @@ class GridTest < MiniTest::Test
     assert_equal 10, @default_grid.width
   end
 
-  def test_build_positions
-    positions = [{ x: 1, y: 1, status: '~' },
-                 { x: 2, y: 1, status: '~' },
-                 { x: 1, y: 2, status: '~' },
-                 { x: 2, y: 2, status: '~' }]
+  def test_positions
+    expected_positions = [{ x: 1, y: 1 }, { x: 2, y: 1 },
+                          { x: 1, y: 2 }, { x: 2, y: 2 }]
+    actual_positions   = []
+    @grid_2x2.positions do |position|
+      actual_positions << position
+    end
 
-    assert_equal positions, @grid_2x2.build_positions
+    assert_equal expected_positions, actual_positions
   end
 
 end
