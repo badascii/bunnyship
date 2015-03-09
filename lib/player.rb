@@ -3,7 +3,7 @@ class Player
   attr_accessor :name, :ships, :misses_against
 
   def initialize(opts={})
-    @name  = opts[:name] || 'Jimmy Bob'
+    @name  = opts[:name]  || 'Jimmy Bob'
     @ships = opts[:ships] || []
 
     if opts[:misses_against]
