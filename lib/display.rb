@@ -69,10 +69,6 @@ class Display
     return "</br>" if type == "html"
   end
 
-  def get_binding
-    binding
-  end
-
   def write_html(path)
     html = build_html
     File.write(path, html)
