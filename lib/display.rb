@@ -1,16 +1,21 @@
-class ConsoleDisplay
+require 'erb'
+require_relative 'grid'
+require_relative 'player'
 
-  attr_accessor :grid, :player
+class Display
+
+  attr_accessor :grid, :player, :type
 
   def initialize(opts={})
     @grid   = opts[:grid]   || Grid.new
     @player = opts[:player] || Player.new
+    @type   = opts[:type]   || "console"
   end
 
   def build_row(position)
     output_string  = ""
     output_string += get_status(position)
-    output_string += "#{position[:y]}\n" if position[:x] == grid.width
+    output_string += "#{position[:y]}#{line_break}" if position[:x] == grid.width
 
     return output_string
   end
@@ -44,11 +49,29 @@ class ConsoleDisplay
 
     grid.width.times { |x| x_legend << (x + 1).to_s }
 
-    return x_legend + "\n"
+    return x_legend + "#{line_break}"
   end
 
   def build_complete_grid
     build_x_legend + build_all_rows
+  end
+
+  def build_html
+    b = binding
+    erb = File.read("./lib/html_template.erb")
+    template = ERB.new(erb)
+    html = template.result(b)
+    return html
+  end
+  
+  def line_break
+    return "\n"    if type == "console"
+    return "</br>" if type == "html"
+  end
+
+  def write_html(path)
+    html = build_html
+    File.write(path, html)
   end
 
 end
