@@ -1,20 +1,20 @@
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'yaml'
-require_relative '../lib/console_display'
+require_relative '../lib/display'
 require_relative '../lib/player'
 require_relative '../lib/grid'
 require_relative '../lib/ship'
 
-class ConsoleDisplayTest < MiniTest::Test
+class DisplayTest < MiniTest::Test
 
   def setup
     @grid_2x2        = Grid.new(width: 2, height: 2)
     @grid_5x5        = Grid.new(width: 5, height: 5)
     @default_grid    = Grid.new
     @player          = Player.new
-    console_opts     = {grid: @default_grid, player: @player}
-    @console_display = ConsoleDisplay.new(console_opts)
+    display_opts     = {grid: @default_grid, player: @player}
+    @console_display = Display.new(display_opts)
   end
 
   def test_build_x_legend
@@ -24,8 +24,8 @@ class ConsoleDisplayTest < MiniTest::Test
   end
 
   def test_build_2x2_output
-    console_opts    = {grid: @grid_2x2, player: @player}
-    console_2x2     = ConsoleDisplay.new(console_opts)
+    display_opts    = {grid: @grid_2x2, player: @player}
+    console_2x2     = Display.new(display_opts)
     expected_string = "~~1\n~~2\n"
 
     assert_equal expected_string, console_2x2.build_all_rows
