@@ -57,13 +57,14 @@ class Display
   end
 
   def build_html
-    b = binding
-    erb = File.read("./lib/html_template.erb")
+    b        = binding
+    erb      = File.read("./lib/html_template.erb")
     template = ERB.new(erb)
-    html = template.result(b)
+    html     = template.result(b)
+
     return html
   end
-  
+
   def line_break
     return "\n"    if type == "console"
     return "</br>" if type == "html"

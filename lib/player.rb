@@ -1,3 +1,5 @@
+require 'set'
+
 class Player
 
   attr_accessor :name, :ships, :misses_against

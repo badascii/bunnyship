@@ -1,6 +1,5 @@
-require 'set'
-
 class Grid
+
   attr_reader :height, :width
 
   def initialize(opts={})
