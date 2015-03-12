@@ -9,12 +9,10 @@ require_relative '../lib/ship'
 class DisplayTest < MiniTest::Test
 
   def setup
+    @console_display = Display.new
+    @player          = Player.new
     @grid_2x2        = Grid.new(width: 2, height: 2)
     @grid_5x5        = Grid.new(width: 5, height: 5)
-    @default_grid    = Grid.new
-    @player          = Player.new
-    display_opts     = {grid: @default_grid, player: @player}
-    @console_display = Display.new(display_opts)
   end
 
   def test_build_x_legend
