@@ -1,10 +1,13 @@
+require_relative '../lib/grid'
+
 class Game
 
-  attr_accessor :ships
+  attr_accessor :ships, :grid, :players
 
-  def initialize(opts)
-    @ships = opts['ships']
-    @grid  = opts['grid']
+  def initialize(opts={})
+    @ships   = opts['ships']   || {}
+    @grid    = opts['grid']    || Grid.new
+    @players = opts['players'] || []
   end
 
   def valid_fleet?(player_ships)
