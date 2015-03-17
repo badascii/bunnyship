@@ -26,9 +26,9 @@ class ValidatorTest < MiniTest::Test
     assert_equal 1, @validator.game.players.length
   end
 
-  def test_validate_ship_type
-    assert_equal true,  @validator.valid_ship?('battleship')
-    assert_equal false, @validator.valid_ship?('sub')
+  def test_validate_type
+    assert_equal true,  @validator.valid_type?('battleship')
+    assert_equal false, @validator.valid_type?('sub')
   end
 
   def test_x_exists

@@ -14,8 +14,8 @@ class Validator
 	#   valid?(input)
 	# end
 
-	def valid_ship?(ship)
-		game.ships.has_key?(ship)
+	def valid_type?(type)
+		game.ships.has_key?(type)
 	end
 
 	def x_exists?(x)
