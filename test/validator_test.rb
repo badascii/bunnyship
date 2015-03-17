@@ -11,7 +11,7 @@ class ValidatorTest < MiniTest::Test
 
   def setup
     opts        = {type: 'battleship', positions: [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1}]}
-    player_ship        = Ship.new(opts)
+    player_ship = Ship.new(opts)
     player      = Player.new
     player.ships << player_ship
     @game       = Game.new
@@ -26,9 +26,9 @@ class ValidatorTest < MiniTest::Test
     assert_equal 1, @validator.game.players.length
   end
 
-  def test_validate_ship_type
-    assert_equal true,  @validator.valid_ship?('battleship')
-    assert_equal false, @validator.valid_ship?('sub')
+  def test_validate_type
+    assert_equal true,  @validator.valid_type?('battleship')
+    assert_equal false, @validator.valid_type?('sub')
   end
 
   def test_x_exists
@@ -57,6 +57,76 @@ class ValidatorTest < MiniTest::Test
     invalid_y   = 8
     assert_equal true, @validator.valid_height?(y, ship_length)
     assert_equal false, @validator.valid_height?(invalid_y, ship_length)
+  end
+
+  def test_valid_alignment
+    valid_h = {
+      type: 'battleship',
+      x: 1,
+      y: 1,
+      alignment: 'h'
+    }
+
+    invalid_h = {
+      type: 'battleship',
+      x: 9,
+      y: 1,
+      alignment: 'h'
+    }
+
+    valid_v = {
+      type: 'battleship',
+      x: 1,
+      y: 1,
+      alignment: 'v'
+    }
+
+    invalid_v = {
+      type: 'battleship',
+      x: 1,
+      y: 9,
+      alignment: 'v'
+    }
+
+    assert_equal true, @validator.valid_alignment?(valid_h)
+    assert_equal false, @validator.valid_alignment?(invalid_h)
+    assert_equal true, @validator.valid_alignment?(valid_v)
+    assert_equal false, @validator.valid_alignment?(invalid_v)
+  end
+
+  def test_valid_input
+    valid_battleship = {
+      type: 'battleship',
+      x: 1,
+      y: 1,
+      alignment: 'h'
+    }
+
+    invalid_battleship = {
+      type: 'battleship',
+      x: 1,
+      y: 9,
+      alignment: 'v'
+    }
+
+    invalid_x = {
+      type: 'battleship',
+      x: 11,
+      y: 1,
+      alignment: 'h'
+    }
+
+    invalid_y = {
+      type: 'battleship',
+      x: 1,
+      y: 11,
+      alignment: 'v'
+    }
+
+    assert_equal true, @validator.valid_ship?(valid_battleship)
+    assert_equal false, @validator.valid_ship?(invalid_battleship)
+    assert_equal false, @validator.valid_ship?(invalid_x)
+    assert_equal false, @validator.valid_ship?(invalid_y)
   end
 
 end
