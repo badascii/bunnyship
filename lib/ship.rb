@@ -56,4 +56,8 @@ class Ship
     (pos_1 - 1 == pos_2) || (pos_1 + 1 == pos_2)
   end
 
+  def ==(other_ship)
+    (type == other_ship.type) && (positions == other_ship.positions)
+  end
+
 end
