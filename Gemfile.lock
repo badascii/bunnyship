@@ -4,6 +4,7 @@ GEM
     docile (1.1.5)
     minitest (5.5.1)
     multi_json (1.10.1)
+    rake (10.4.2)
     simplecov (0.9.2)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -15,4 +16,5 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
+  rake
   simplecov
