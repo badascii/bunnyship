@@ -61,4 +61,8 @@ class ConsoleDisplay < Display
     return input_hash
   end
 
+  def all_ships_placed?
+    game.ships.length == player.ships.length
+  end
+
 end

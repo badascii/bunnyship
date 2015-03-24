@@ -6,9 +6,9 @@ require_relative '../lib/game'
 class GameTest < MiniTest::Test
 
   def setup
-    opts  = YAML.load_file('./settings.yaml')
-    @game = Game.new(opts)
-    @ships = YAML.load_file('./player_1.yaml')
+    opts   = YAML.load_file('./test/settings.yaml')
+    @game  = Game.new(opts)
+    @ships = YAML.load_file('./test/player_1.yaml')
   end
 
   def test_valid_ship

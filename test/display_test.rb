@@ -26,10 +26,9 @@ class DisplayTest < MiniTest::Test
   def test_build_2x2_output
     display_opts    = {game: @game_2x2, player: @player}
     display_2x2     = Display.new(display_opts)
-    expected_string = {1=>["empty", "empty"], 2=>["empty", "empty"]}
+    expected_hash   = {1=>["empty", "empty"], 2=>["empty", "empty"]}
 
-    assert_equal expected_string, display_2x2.build_all_rows
-    puts display_2x2.build_all_rows
+    assert_equal expected_hash, display_2x2.build_all_rows
   end
 
   def test_build_10x10_output
