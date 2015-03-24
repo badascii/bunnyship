@@ -9,71 +9,43 @@ require_relative '../lib/ship'
 class DisplayTest < MiniTest::Test
 
   def setup
-    @console_display = Display.new
-    @player          = Player.new
-    @grid_2x2        = Grid.new(width: 2, height: 2)
-    @grid_5x5        = Grid.new(width: 5, height: 5)
+    @display  = Display.new
+    @player   = Player.new
+    grid_2x2  = Grid.new(width: 2, height: 2)
+    @game_2x2 = Game.new(grid: grid_2x2)
+    grid_5x5  = Grid.new(width: 5, height: 5)
+    @game_5x5 = Game.new(grid: grid_5x5)
   end
 
   def test_build_x_legend
-    expected_legend = "12345678910\n"
+    expected_legend = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
-    assert_equal expected_legend, @console_display.build_x_legend
+    assert_equal expected_legend, @display.build_x_legend
   end
 
   def test_build_2x2_output
-    display_opts    = {grid: @grid_2x2, player: @player}
-    console_2x2     = Display.new(display_opts)
-    expected_string = "~~1\n~~2\n"
+    display_opts    = {game: @game_2x2, player: @player}
+    display_2x2     = Display.new(display_opts)
+    expected_string = {1=>["empty", "empty"], 2=>["empty", "empty"]}
 
-    assert_equal expected_string, console_2x2.build_all_rows
+    assert_equal expected_string, display_2x2.build_all_rows
+    puts display_2x2.build_all_rows
   end
 
   def test_build_10x10_output
-    expected_string = ""
+    expected_hash = {
+     1=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     2=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     3=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     4=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     5=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     6=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     7=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     8=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+     9=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"],
+    10=>["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"]}
 
-    10.times { |y| expected_string += "~~~~~~~~~~#{y + 1}\n" }
-
-    assert_equal expected_string, @console_display.build_all_rows
-  end
-
-  def test_build_complete_grid
-    expected_string = "12345678910\n"
-
-    10.times { |y| expected_string += "~~~~~~~~~~#{y + 1}\n" }
-
-    assert_equal expected_string, @console_display.build_complete_grid
-  end
-
-  def test_get_status
-    hit      = '*'
-    miss     = '!'
-    occupied = 'D'
-    empty    = '~'
-
-    opts     = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}], damage: [{x: 1, y: 1}]}
-    ship     = Ship.new(opts)
-
-    @player.ships << ship
-    @player.misses_against << {x: 3, y: 3}
-
-    assert_equal hit, @console_display.get_status(x: 1, y: 1)
-    assert_equal miss, @console_display.get_status(x: 3, y: 3)
-    assert_equal occupied, @console_display.get_status(x: 1, y: 2)
-    assert_equal empty, @console_display.get_status(x: 4, y: 1)
-  end
-
-  def test_display_battleship
-    opts = {type: 'battleship', positions: [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1}, {x: 5, y: 1}]}
-    ship = Ship.new(opts)
-
-    @player.ships << ship
-
-    assert_equal 'B', @console_display.get_status({x: 1, y: 1})
-    assert_equal 'B', @console_display.get_status({x: 2, y: 1})
-    assert_equal 'B', @console_display.get_status({x: 3, y: 1})
-    assert_equal 'B', @console_display.get_status({x: 4, y: 1})
-    assert_equal 'B', @console_display.get_status({x: 5, y: 1})
+    assert_equal expected_hash, @display.build_all_rows
   end
 
 end
