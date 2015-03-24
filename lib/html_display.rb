@@ -6,7 +6,7 @@ require_relative '../lib/display'
 class HTMLDisplay < Display
 
   ICON_MAPPING = {
-    'empty'      => '~',
+    'empty'      => "<img src='../public/images/wave.png' />",
     'miss'       => '!',
     'hit'        => '*',
     'carrier'    => 'A',
