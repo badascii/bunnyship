@@ -15,9 +15,23 @@ class Player
     end
   end
 
+  def get_position_status(position)
+    return 'miss' if misses_against.include?(position)
+
+    ships.each do |ship|
+      if ship.damage.include?(position)
+        return 'hit'
+      elsif ship.positions.include?(position)
+        return ship.type
+      end
+    end
+
+    return 'empty'
+  end
+
   def active_ships
    active_ships = []
-   @ships.each do |ship|
+   ships.each do |ship|
       unless ship.destroyed?
         active_ships << ship
       end
