@@ -15,7 +15,7 @@ class ValidatorTest < MiniTest::Test
     player      = Player.new
     player.ships << player_ship
     @game       = Game.new
-    @game.players << player
+    @game.players[player.name] = player
     game_ship   = { 'battleship' => 4 }
     @game.ships = game_ship
     @validator  = Validator.new(@game)
@@ -44,7 +44,7 @@ class ValidatorTest < MiniTest::Test
   end
 
   def test_valid_width?
-    ship_length = @game.players[0].ships.first.size
+    ship_length = @game.players['Jimmy Bob'].ships.first.size
     x           = 4
     invalid_x   = 8
     assert_equal true, @validator.valid_width?(x, ship_length)
@@ -52,7 +52,7 @@ class ValidatorTest < MiniTest::Test
   end
 
   def test_valid_height?
-    ship_length = @game.players[0].ships.first.size
+    ship_length = @game.players['Jimmy Bob'].ships.first.size
     y           = 4
     invalid_y   = 8
     assert_equal true, @validator.valid_height?(y, ship_length)

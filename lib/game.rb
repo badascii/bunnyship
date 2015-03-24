@@ -7,7 +7,7 @@ class Game
   def initialize(opts={})
     @ships   = opts['ships']   || {}
     @grid    = opts['grid']    || Grid.new
-    @players = opts['players'] || []
+    @players = opts['players'] || {}
   end
 
   def valid_fleet?(player_ships)
