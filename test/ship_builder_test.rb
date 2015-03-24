@@ -1,6 +1,5 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require 'yaml'
 require_relative '../lib/ship_builder'
 
 class ShipBuilderTest < MiniTest::Test

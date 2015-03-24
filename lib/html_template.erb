@@ -1,8 +1,17 @@
 <html>
-	<head>
-		<h2>BattleShip</h2>
-	</head>
-	<body>
-		<%= build_complete_grid %>
-	</body>
+  <head>
+    <h2>BattleShip</h2>
+  </head>
+  <body>
+    <table>
+      <% build_all_rows.each do |legend, row| %>
+        <tr>
+          <td><%= legend %></td>
+          <% row.each do |position_status| %>
+            <td><%= ICON_MAPPING[position_status] %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  </body>
 </html>
