@@ -36,6 +36,16 @@ class PlayerTest < MiniTest::Test
     assert_equal 'battleship', @player.get_position_status({x: 5, y: 1})
   end
 
+  def test_shot_hit
+    assert_equal false, @player.shot_hit?(x: 1, y: 1)
+
+    opts = {type: 'battleship', positions: [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1}, {x: 5, y: 1}]}
+    ship = Ship.new(opts)
+    @player.ships << ship
+
+    assert_equal true, @player.shot_hit?(x: 1, y: 1)
+  end
+
   def test_process_hit
     opts     = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 2}], damage: [{x: 1, y: 1}]}
     ship     = Ship.new(opts)

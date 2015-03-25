@@ -43,6 +43,15 @@ class Player
     !active_ships.empty?
   end
 
+  def shot_hit?(shot_position)
+    ships.each do |ship|
+      ship.positions.each do |position|
+        return true if position == shot_position
+      end
+    end
+    return false
+  end
+
   def process_hit(position)
     ships.each do |ship|
       if ship.positions.include?(position)
