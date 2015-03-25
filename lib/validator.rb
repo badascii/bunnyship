@@ -18,10 +18,20 @@ class Validator
 		return true
 	end
 
+	def valid_shot?(opts)
+		x = opts[:x]
+		y = opts[:y]
+
+		return false unless x_exists?(x)
+		return false unless y_exists?(y)
+		return true
+	end
+
 	def valid_type?(type)
 		game.ships.has_key?(type)
 	end
 
+	# move to grid class
 	def x_exists?(x)
 		x <= game.grid.width && x > 0
 	end

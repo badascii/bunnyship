@@ -12,10 +12,10 @@ class ValidatorTest < MiniTest::Test
   def setup
     opts        = {type: 'battleship', positions: [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1}]}
     player_ship = Ship.new(opts)
-    player      = Player.new
-    player.ships << player_ship
+    @player      = Player.new
+    @player.ships << player_ship
     @game       = Game.new
-    @game.players[player.name] = player
+    @game.players[@player.name] = @player
     game_ship   = { 'battleship' => 4 }
     @game.ships = game_ship
     @validator  = Validator.new(@game)
@@ -44,7 +44,7 @@ class ValidatorTest < MiniTest::Test
   end
 
   def test_valid_width?
-    ship_length = @game.players['Jimmy Bob'].ships.first.size
+    ship_length = @game.players[@player.name].ships.first.size
     x           = 4
     invalid_x   = 8
     assert_equal true, @validator.valid_width?(x, ship_length)
@@ -52,7 +52,7 @@ class ValidatorTest < MiniTest::Test
   end
 
   def test_valid_height?
-    ship_length = @game.players['Jimmy Bob'].ships.first.size
+    ship_length = @game.players[@player.name].ships.first.size
     y           = 4
     invalid_y   = 8
     assert_equal true, @validator.valid_height?(y, ship_length)
@@ -127,6 +127,11 @@ class ValidatorTest < MiniTest::Test
     assert_equal false, @validator.valid_ship?(invalid_battleship)
     assert_equal false, @validator.valid_ship?(invalid_x)
     assert_equal false, @validator.valid_ship?(invalid_y)
+  end
+
+  def test_valid_shot
+    assert_equal true, @validator.valid_shot?(x: 1, y: 1)
+    assert_equal false, @validator.valid_shot?(x: 99, y: 99)
   end
 
 end
