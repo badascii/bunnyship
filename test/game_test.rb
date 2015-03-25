@@ -1,28 +1,34 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require 'yaml'
 require_relative '../lib/game'
+require_relative '../lib/player'
+require_relative '../lib/ship_builder'
 
 class GameTest < MiniTest::Test
 
   def setup
-    opts   = YAML.load_file('./test/settings.yaml')
-    @game  = Game.new(opts)
-    @ships = YAML.load_file('./test/player_1.yaml')
+    @game   = Game.new
+    @player = Player.new
   end
 
-  def test_valid_ship
-    carrier = @ships.assoc('carrier')
-    assert_equal(true, @game.valid_ship?(carrier))
+  def test_active_player_count
+    assert_equal 0, @game.active_player_count
+
+    @game.players[@player.name] = @player
+    ship = ShipBuilder.new(type: 'battleship', x: 1, y: 1, alignment: 'h', length: 4).ship
+    @game.players[@player.name].ships << ship
+
+    assert_equal 1, @game.active_player_count
   end
 
-  def test_valid_fleet
-    assert_equal(true, @game.valid_fleet?(@ships))
-  end
+  def test_active
+    assert_equal false, @game.active?
 
-  # def test_ship_not_in_sequence
-  #   ship = {type: 'destroyer', positions: [{x: 1, y: 1}, {x: 1, y: 5}]}
-  #   assert_equal(false, ship.valid_ship?)
-  # end
+    @game.players[@player.name] = @player
+    ship = ShipBuilder.new(type: 'battleship', x: 1, y: 1, alignment: 'h', length: 4).ship
+    @game.players[@player.name].ships << ship
+
+    assert_equal true, @game.active?
+  end
 
 end
