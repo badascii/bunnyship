@@ -1,6 +1,20 @@
 ---
-carrier: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}]
-battleship: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}]
-submarine: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
-cruiser: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
-destroyer: [{x: 1, y: 1}, {x: 1, y: 2}]
+- type: "carrier"
+  positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}]
+  damage: []
+
+- type: "battleship"
+  positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}]
+  damage: []
+
+- type: "submarine"
+  positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
+  damage: []
+
+- type: "cruiser"
+  positions: [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}]
+  damage: []
+
+- type: "destroyer"
+  positions: [{x: 1, y: 1}, {x: 1, y: 2}]
+  damage: []
