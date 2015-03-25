@@ -5,7 +5,7 @@ class Player
   attr_accessor :name, :ships, :misses_against
 
   def initialize(opts={})
-    @name  = opts[:name]  || 'Jimmy Bob'
+    @name  = opts[:name]  || 'Jimmy'
     @ships = opts[:ships] || []
 
     if opts[:misses_against]
@@ -41,6 +41,15 @@ class Player
 
   def active?
     !active_ships.empty?
+  end
+
+  def process_hit(position)
+    ships.each do |ship|
+      if ship.positions.include?(position)
+        ship.damage << position
+        return
+      end
+    end
   end
 
 end
