@@ -4,6 +4,12 @@
   </head>
   <body>
     <table>
+      <tr>
+        <td></td>
+      <% build_x_legend.each do |legend| %>
+        <td><%= legend %></td>
+      <% end %>
+      </tr>
       <% build_all_rows.each do |legend, row| %>
         <tr>
           <td><%= legend %></td>
