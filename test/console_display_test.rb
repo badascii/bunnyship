@@ -46,4 +46,24 @@ class ConsoleDisplayTest < MiniTest::Test
     assert_equal expected_hash, @console_display.build_input_hash(input)
   end
 
+  def test_build_shot_input_hash
+    expected_hash = {
+      player: 'Jimmy',
+      x:      1,
+      y:      1
+    }
+    input = ['fire', 'Jimmy', '1', '1']
+
+    assert_equal expected_hash, @console_display.build_shot_input_hash(input)
+  end
+
+  # def test_fire_invalid_shot
+  #   expected_message = 'Invalid input. Please try again.'
+  #   assert_equal expected_message, @console_display.fire_shot(x: 'a', y: 'b')
+  # end
+
+  # def test_all_ships_placed
+  #   assert_equal false, @console_display.all_ships_placed?
+  # end
+
 end
