@@ -52,7 +52,7 @@ class ConsoleDisplay < Display
     puts "Choose a player and grid location to fire at. Example: fire player_name x y\n"
     input      = gets.downcase.split(/\W+/)
     input_hash = build_shot_input_hash(input)
-    fire_shot(input_hash)
+    process_shot(input_hash)
   end
 
   def process_shot(input)
