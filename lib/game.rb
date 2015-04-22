@@ -2,7 +2,7 @@ require_relative '../lib/grid'
 
 class Game
 
-  attr_accessor :ships, :grid, :players
+  attr_accessor :ships, :grid, :players, :id
 
   def initialize(opts={})
     @ships   = opts[:ships]   || {}
@@ -32,7 +32,7 @@ class Game
     players.each do |player_name, player|
       player_count += 1 if player.active?
     end
-    
+
     return player_count
   end
 
