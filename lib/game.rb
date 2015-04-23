@@ -2,12 +2,15 @@ require_relative '../lib/grid'
 
 class Game
 
-  attr_accessor :ships, :grid, :players, :id
+  attr_accessor :ships, :grid, :players, :id, :turn_history, :turn_order, :current_turn
 
   def initialize(opts={})
-    @ships   = opts[:ships]   || {}
-    @grid    = opts[:grid]    || Grid.new
-    @players = opts[:players] || {}
+    @ships          = opts[:ships]   || {}
+    @grid           = opts[:grid]    || Grid.new
+    @players        = opts[:players] || {}
+    @turn_history   = []
+    @turn_order     = []
+    @current_turn ||= []
   end
 
   def valid_fleet?(player_ships)
@@ -34,6 +37,16 @@ class Game
     end
 
     return player_count
+  end
+
+  def add(player)
+    players[player.name] = player
+    turn_order << player
+  end
+
+  def subtract(player)
+    players.delete(player.name)
+    turn_order.delete(player)
   end
 
 end
