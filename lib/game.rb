@@ -2,7 +2,7 @@ require_relative '../lib/grid'
 
 class Game
 
-  attr_accessor :ships, :grid, :id, :turn_history, :turn_order, :current_turn
+  attr_accessor :ships, :grid, :players, :id, :turn_history, :turn_order, :current_turn
 
   def initialize(opts={})
     @ships          = opts[:ships]   || {}
