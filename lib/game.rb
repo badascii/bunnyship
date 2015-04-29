@@ -4,8 +4,16 @@ class Game
 
   attr_accessor :ships, :grid, :players, :id, :turn_history, :turn_order, :current_turn
 
+  DEFAULT_SHIPS = {
+    'carrier'    => 5,
+    'battleship' => 4,
+    'submarine'  => 3,
+    'cruiser'    => 3,
+    'destroyer'  => 2
+  }
+
   def initialize(opts={})
-    @ships          = opts[:ships]   || {}
+    @ships          = opts[:ships]   || DEFAULT_SHIPS
     @grid           = opts[:grid]    || Grid.new
     @players        = opts[:players] || {}
     @turn_history   = []

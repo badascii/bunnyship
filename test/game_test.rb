@@ -12,6 +12,14 @@ class GameTest < MiniTest::Test
     @player_2 = Player.new(name: 'Joe')
   end
 
+  def test_default_ships
+    assert_equal 5, @game.ships['carrier']
+    assert_equal 4, @game.ships['battleship']
+    assert_equal 3, @game.ships['submarine']
+    assert_equal 3, @game.ships['cruiser']
+    assert_equal 2, @game.ships['destroyer']
+  end
+
   def test_active_player_count
     assert_equal 0, @game.active_player_count
 
@@ -63,7 +71,7 @@ class GameTest < MiniTest::Test
     @game.add(@player_1)
     @game.add(@player_2)
 
-    @game.sub(@player_2)
+    @game.subtract(@player_2)
     assert_equal expected_hash, @game.players
     assert_equal expected_turn, @game.turn_order
   end
