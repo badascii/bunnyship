@@ -17,6 +17,7 @@ class Game
     @grid         = opts[:grid]    || Grid.new
     @players      = opts[:players] || {}
     @turn_order   = []
+    @turn_history = []
   end
 
   def valid_fleet?(player_ships)
