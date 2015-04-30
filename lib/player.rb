@@ -4,6 +4,10 @@ class Player
 
   attr_accessor :name, :ships, :misses_against
 
+  HIT   = 'hit'
+  MISS  = 'miss'
+  EMPTY = 'empty'
+
   def initialize(opts={})
     @name  = opts[:name]  || 'Jimmy'
     @ships = opts[:ships] || []
@@ -16,17 +20,16 @@ class Player
   end
 
   def get_position_status(position)
-    return 'miss' if misses_against.include?(position)
+    return MISS if misses_against.include?(position)
 
     ships.each do |ship|
       if ship.damage.include?(position)
-        return 'hit'
+        return HIT
       elsif ship.positions.include?(position)
         return ship.type
       end
     end
-
-    return 'empty'
+    return EMPTY
   end
 
   def active_ships
