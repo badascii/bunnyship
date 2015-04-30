@@ -1,6 +1,4 @@
-require 'bunny'
 require 'json'
-require_relative '../lib/player'
 
 class PlayerWorker
   attr_reader :reply_queue
@@ -39,7 +37,7 @@ class PlayerWorker
   end
 
   def generate_uuid
-    "#{rand}#{rand}#{rand}"
+    "#{rand}#{rand}"
   end
 
   def build_play_input_hash(input)
@@ -58,7 +56,9 @@ class PlayerWorker
         type:      input[1],
         x:         input[2].to_i,
         y:         input[3].to_i,
-        alignment: input[4]
+        alignment: input[4],
+        name:      input[5],
+        game_id:   input[6]
       }
     }
   end
@@ -69,30 +69,3 @@ class PlayerWorker
     }
   end
 end
-
-print ARGV
-
-conn   = Bunny.new(automatically_recover: false)
-
-conn.start
-
-ch     = conn.create_channel
-player = PlayerWorker.new(ch, 'rpc_queue')
-input_hash = {}
-
-if ARGV[0] == 'play'
-  input_hash = player.build_play_input_hash(ARGV)
-elsif ARGV[0] == 'place'
-  input_hash = player.build_placement_input_hash(ARGV)
-elsif ARGV[0] == 'ready'
-  input_hash = player.build_ready_input_hash(ARGV)
-end
-
-puts " [x] Sent input"
-
-response = player.call(input_hash)
-
-puts " [.] Got #{response}"
-
-ch.close
-conn.close
