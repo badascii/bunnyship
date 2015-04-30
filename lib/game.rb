@@ -13,12 +13,10 @@ class Game
   }
 
   def initialize(opts={})
-    @ships          = opts[:ships]   || DEFAULT_SHIPS
-    @grid           = opts[:grid]    || Grid.new
-    @players        = opts[:players] || {}
-    @turn_history   = []
-    @turn_order     = []
-    @current_turn ||= []
+    @ships        = opts[:ships]   || DEFAULT_SHIPS
+    @grid         = opts[:grid]    || Grid.new
+    @players      = opts[:players] || {}
+    @turn_order   = []
   end
 
   def valid_fleet?(player_ships)
@@ -49,12 +47,23 @@ class Game
 
   def add(player)
     players[player.name] = player
-    turn_order << player
+    turn_order << player.name
   end
 
   def subtract(player)
     players.delete(player.name)
-    turn_order.delete(player)
+    turn_order.delete(player.name)
+  end
+
+  def set_turn_order
+    raise ArgumentError.new('Not enough players!') if players.size <= 1
+    turn_order.shuffle
+  end
+
+  def toggle_players
+    current_player = turn_order.shift
+    turn_order << current_player
+    current_turn = current_player
   end
 
 end
