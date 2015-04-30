@@ -1,4 +1,5 @@
 require_relative '../lib/ship'
+require_relative '../lib/game'
 
 class ShipBuilder
 
@@ -9,7 +10,7 @@ class ShipBuilder
     @x         = opts[:x]
     @y         = opts[:y]
     @alignment = opts[:alignment]
-    @length    = opts[:length]
+    @length    = opts[:length] || Game::DEFAULT_SHIPS[type]
     @positions = get_positions
     @ship      = Ship.new(type: type, positions: positions)
   end
