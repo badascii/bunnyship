@@ -4,7 +4,7 @@ require_relative '../lib/game'
 require_relative '../lib/player'
 require_relative '../lib/ship_builder'
 
-class GameWorker
+class GameRPCWorker
 
   attr_accessor :games
 
@@ -22,39 +22,46 @@ class GameWorker
       payload_hash = JSON.parse(payload, symbolize_names: true)
       response     = nil
 
-      if payload_hash[:command] == 'play'
-        response = play_command(payload_hash)
-      elsif payload_hash[:command] == 'place'
-        response = place_command(payload_hash)
-      elsif payload_hash[:command] == 'ready'
-        response = ready_command(payload_hash)
-      else
-        response = 'INVALID'
-      end
+      response = if payload_hash[:command] == 'play'
+                   process_play_command(payload_hash)
+                 elsif payload_hash[:command] == 'place'
+                   process_place_command(payload_hash)
+                 elsif payload_hash[:command] == 'ready'
+                   process_ready_command(payload_hash)
+                 else
+                   'INVALID'
+                 end
 
-      @x.publish(response, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
+      @x.publish(response.to_s, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
     end
   end
 
-  def play_command(payload_hash)
+  def process_play_command(payload_hash)
     game    = fetch_game || create_new_game
     name    = payload_hash[:payload][:name]
     player  = Player.new(name: name)
     @games[game.id].players[name] = player
+    puts "#{name} joined game #{game.id}"
 
     return {game_id: game.id}
   end
 
-  def place_command(payload_hash)
+  def process_place_command(payload_hash)
     name         = payload_hash[:payload][:name]
     game_id      = payload_hash[:payload][:game_id]
     current_game = @games.fetch(game_id)
     current_game.players[name].ships << place_ship(payload_hash[:payload])
+    puts "#{name} placed #{payload_hash[:payload][:type]} on #{current_game.inspect}"
 
     return {game_id: game_id}
   end
 
-  def ready_command(input_hash)
+  def process_ready_command(input_hash)
+    #telling the game worker, input_hash[:name] is ready
+
+  end
+
+  def process_shot_command()
 
   end
 
