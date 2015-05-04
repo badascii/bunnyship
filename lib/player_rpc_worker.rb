@@ -1,13 +1,13 @@
 require 'json'
 
-class PlayerWorker
+class PlayerRPCWorker
   attr_reader :reply_queue
   attr_accessor :response, :call_id
   attr_reader :lock, :condition
 
   def initialize(ch, server_queue)
-    @ch           = ch
-    @x            = ch.default_exchange
+    @ch = ch
+    @x  = ch.default_exchange
 
     @server_queue = server_queue
     @reply_queue  = ch.queue('', exclusive: true)
@@ -23,7 +23,7 @@ class PlayerWorker
     end
   end
 
-  def call(input_hash)
+  def rpc_call(input_hash)
     self.call_id = self.generate_uuid
     json = input_hash.to_json
 
@@ -68,4 +68,5 @@ class PlayerWorker
       command: input[0]
     }
   end
+
 end
