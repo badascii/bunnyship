@@ -4,20 +4,20 @@ require_relative '../lib/game'
 require_relative '../lib/player'
 require_relative '../lib/ship_builder'
 
-class GameRPCWorker
+class GameWorker
 
-  attr_accessor :games
+  attr_accessor :ch, :games
 
   def initialize(ch)
     @ch    = ch
     @games = {}
   end
 
-  def start(queue_name)
-    @q = @ch.queue(queue_name)
-    @x = @ch.default_exchange
+  def start_rpc(queue_name)
+    q = ch.queue(queue_name)
+    x = ch.default_exchange
 
-    @q.subscribe(block: true) do |delivery_info, properties, payload|
+    q.subscribe(block: true) do |delivery_info, properties, payload|
 
       payload_hash = JSON.parse(payload, symbolize_names: true)
       response     = nil
@@ -32,7 +32,61 @@ class GameRPCWorker
                    'INVALID'
                  end
 
-      @x.publish(response.to_s, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
+      x.publish(response.to_s, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
+    end
+  end
+
+  def start_topic
+    q = ch.queue('', exclusive: true)
+    x = ch.topic('game_updates')
+
+    bind_all_active_games(q, x)
+
+    q.subscribe(block: true) do |delivery_info, properties, body|
+      puts " [x] #{delivery_info.routing_key}:#{body}"
+      game_id = delivery_info.routing_key
+      process_shot(game_id, body, x)
+      bind_all_active_games(q, x)
+    end
+  end
+
+  def process_shot(game_id, body, x)
+    game            = game_worker.games[game_id]
+    targeted_player = game.players[body[:target]]
+    shot_position   = {x: body[:x], y: body[:y]}
+
+    if targeted_player.shot_hit?(shot_position)
+      game.switch_turns
+      body[:next_turn] = game.current_turn
+      body[:result]    = 'hit'
+      targeted_player.process_hit(shot_position)
+    else
+      game.switch_turns
+      body[:next_turn] = game.current_turn
+      body[:result]    = 'miss'
+      targeted_player.misses_against << shot_position
+    end
+
+    emit_game_update(game_id, body, x)
+  end
+
+  def emit_game_update(game_id, body, x)
+    game_update = build_game_update_hash(body)
+    x.publish(game_update, routing_key: "games.#{game_id}")
+  end
+
+  def build_game_update_hash(body)
+    return {
+      attacker:  body[:name],
+      target:    body[:target],
+      result:    body[:result],
+      next_turn: body[:next_turn]
+    }
+  end
+
+  def bind_all_active_games(q, x)
+    games.each do |game|
+      q.bind(x, routing_key: game.id)
     end
   end
 
@@ -56,13 +110,7 @@ class GameRPCWorker
     return {game_id: game_id}
   end
 
-  def process_ready_command(input_hash)
-    #telling the game worker, input_hash[:name] is ready
-
-  end
-
-  def process_shot_command()
-
+  def process_ready_command(payload_hash)
   end
 
   def fetch_game

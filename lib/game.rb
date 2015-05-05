@@ -61,7 +61,7 @@ class Game
     turn_order.shuffle
   end
 
-  def toggle_players
+  def switch_turns
     current_player = turn_order.shift
     turn_order << current_player
     current_turn = current_player
