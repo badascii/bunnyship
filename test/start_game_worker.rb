@@ -1,17 +1,20 @@
 require 'bunny'
 # require_relative '../lib/game'
 # require_relative '../lib/player'
-require_relative '../lib/game_rpc_worker'
+require_relative '../lib/game_worker'
 
 conn = Bunny.new(automatically_recover: false)
 conn.start
-
-ch = conn.create_channel
+ch   = conn.create_channel
 
 begin
-  game_rpc_worker = GameRPCWorker.new(ch)
+  game_worker = GameWorker.new(ch)
+
   puts " [x] Awaiting Player requests."
-  game_rpc_worker.start('setup_queue')
+
+  game_worker.start_rpc('setup_queue')
+  game_worker.start_topic
+
   # game = Game.new
   # player = Player.new
   # game.players[player.name] = player
@@ -28,8 +31,6 @@ begin
   #       game_id:   '1'
   #     }
   #   }
-
-  # game_rpc_worker.process_place_command(payload_hash)
 rescue Interrupt => _
   ch.close
   conn.close
