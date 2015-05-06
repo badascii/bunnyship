@@ -32,7 +32,8 @@ begin
   #     }
   #   }
 rescue Interrupt => _
-  ch.close
+  rpc_ch.close
+  topic_ch.close
   conn.close
 
   exit(0)
