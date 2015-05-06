@@ -28,12 +28,14 @@ class GameWorker
                  elsif payload_hash[:command] == 'place'
                    process_place_command(payload_hash)
                  elsif payload_hash[:command] == 'ready'
-                   process_ready_command
+                   'OK'
                  else
                    'INVALID'
                  end
 
       x.publish(response.to_s, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
+
+      process_ready_command if payload_hash[:command] == 'ready'
     end
   end
 
@@ -70,7 +72,8 @@ class GameWorker
 
   def emit_game_update(game_id, body, x)
     game_update = build_game_update_hash(body)
-    x.publish(game_update, routing_key: "games.#{game_id}")
+
+    x.publish(game_update.to_json, routing_key: "games.#{game_id}")
   end
 
   def build_game_update_hash(body)
