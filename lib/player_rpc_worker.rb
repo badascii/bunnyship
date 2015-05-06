@@ -10,7 +10,7 @@ class PlayerRPCWorker
     @x  = ch.default_exchange
 
     @server_queue = server_queue
-    @reply_queue  = ch.queue('', exclusive: true)
+    @reply_queue  = ch.queue('')
 
     @lock         = Mutex.new
     @condition    = ConditionVariable.new
@@ -25,7 +25,7 @@ class PlayerRPCWorker
 
   def rpc_call(input_hash)
     self.call_id = self.generate_uuid
-    json = input_hash.to_json
+    json         = input_hash.to_json
 
     @x.publish(json,
                routing_key:    @server_queue,

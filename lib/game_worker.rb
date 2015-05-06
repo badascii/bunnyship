@@ -6,16 +6,17 @@ require_relative '../lib/ship_builder'
 
 class GameWorker
 
-  attr_accessor :ch, :games
+  attr_accessor :rpc_ch, :topic_ch, :games
 
-  def initialize(ch)
-    @ch    = ch
-    @games = {}
+  def initialize(rpc_ch, topic_ch)
+    @rpc_ch   = rpc_ch
+    @topic_ch = topic_ch
+    @games    = {}
   end
 
   def start_rpc(queue_name)
-    q = ch.queue(queue_name)
-    x = ch.default_exchange
+    q = rpc_ch.queue(queue_name)
+    x = rpc_ch.default_exchange
 
     q.subscribe(block: true) do |delivery_info, properties, payload|
 
@@ -27,31 +28,30 @@ class GameWorker
                  elsif payload_hash[:command] == 'place'
                    process_place_command(payload_hash)
                  elsif payload_hash[:command] == 'ready'
-                   process_ready_command(payload_hash)
+                   'OK'
                  else
                    'INVALID'
                  end
 
       x.publish(response.to_s, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
+
+      process_ready_command if payload_hash[:command] == 'ready'
     end
   end
 
-  def start_topic
-    q = ch.queue('', exclusive: true)
-    x = ch.topic('game_updates')
-
-    bind_all_active_games(q, x)
-
+  def start_topic(q, x)
     q.subscribe(block: true) do |delivery_info, properties, body|
       puts " [x] #{delivery_info.routing_key}:#{body}"
-      game_id = delivery_info.routing_key
-      process_shot(game_id, body, x)
-      bind_all_active_games(q, x)
+
+      parsed_body = JSON.parse(body, symbolize_names: true)
+      game_id     = delivery_info.routing_key
+
+      process_shot(game_id, parsed_body, x)
     end
   end
 
   def process_shot(game_id, body, x)
-    game            = game_worker.games[game_id]
+    game            = games[game_id]
     targeted_player = game.players[body[:target]]
     shot_position   = {x: body[:x], y: body[:y]}
 
@@ -72,7 +72,8 @@ class GameWorker
 
   def emit_game_update(game_id, body, x)
     game_update = build_game_update_hash(body)
-    x.publish(game_update, routing_key: "games.#{game_id}")
+
+    x.publish(game_update.to_json, routing_key: "games.#{game_id}")
   end
 
   def build_game_update_hash(body)
@@ -85,16 +86,24 @@ class GameWorker
   end
 
   def bind_all_active_games(q, x)
-    games.each do |game|
-      q.bind(x, routing_key: game.id)
+    puts 'Binding all games...'
+    games.each do |game_id, game|
+      q.bind(x, routing_key: game_id)
+      puts "Bound #{game_id}"
     end
+  end
+
+  def add_player_to_game(game, player)
+    @games[game.id].players[player.name] = player
   end
 
   def process_play_command(payload_hash)
     game    = fetch_game || create_new_game
     name    = payload_hash[:payload][:name]
     player  = Player.new(name: name)
-    @games[game.id].players[name] = player
+
+    add_player_to_game(game, player)
+
     puts "#{name} joined game #{game.id}"
 
     return {game_id: game.id}
@@ -103,6 +112,7 @@ class GameWorker
   def process_place_command(payload_hash)
     name         = payload_hash[:payload][:name]
     game_id      = payload_hash[:payload][:game_id]
+    puts payload_hash.inspect
     current_game = @games.fetch(game_id)
     current_game.players[name].ships << place_ship(payload_hash[:payload])
     puts "#{name} placed #{payload_hash[:payload][:type]} on #{current_game.inspect}"
@@ -110,7 +120,12 @@ class GameWorker
     return {game_id: game_id}
   end
 
-  def process_ready_command(payload_hash)
+  def process_ready_command
+    q = topic_ch.queue('')
+    x = topic_ch.topic('game_updates')
+
+    bind_all_active_games(q, x)
+    start_topic(q, x)
   end
 
   def fetch_game
@@ -123,8 +138,8 @@ class GameWorker
   end
 
   def create_new_game
-    new_game    = Game.new
-    new_game.id = generate_uuid
+    new_game            = Game.new
+    new_game.id         = generate_uuid
     @games[new_game.id] = new_game
     return new_game
   end
