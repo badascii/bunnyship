@@ -85,12 +85,12 @@ class GameTest < MiniTest::Test
     @game.add(@player_2)
     @game.set_turn_order
 
-    assert_equal expected_turn, @game.toggle_players
+    assert_equal expected_turn, @game.switch_turns
 
     expected_turn = @player_2.name
     @game.set_turn_order
 
-    assert_equal expected_turn, @game.toggle_players
+    assert_equal expected_turn, @game.switch_turns
   end
 
 end
