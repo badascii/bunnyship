@@ -7,12 +7,13 @@ require_relative '../lib/game_worker'
 class GameWorkerTest < MiniTest::Test
 
   def setup
-    fake_channel = 'immachannel'
-    @game_worker = GameWorker.new(fake_channel)
-    @game        = Game.new
-    @game.id     = '1'
-    @player_1    = Player.new
-    @player_2    = Player.new(name: 'Bobby')
+    fake_rpc_channel   = 'immachannel'
+    fake_topic_channel = 'immanotherchannel'
+    @game_worker       = GameWorker.new(fake_rpc_channel, fake_topic_channel)
+    @game              = Game.new
+    @game.id           = '1'
+    @player_1          = Player.new
+    @player_2          = Player.new(name: 'Bobby')
     @game_worker.games[@game.id] = @game
   end
 
@@ -46,7 +47,7 @@ class GameWorkerTest < MiniTest::Test
       }
     }
 
-    game_id_hash = @game_worker.play_command(payload_hash)
+    game_id_hash = @game_worker.process_play_command(payload_hash)
 
     assert_equal Hash, game_id_hash.class
     assert_equal String, game_id_hash[:game_id].class
@@ -67,7 +68,7 @@ class GameWorkerTest < MiniTest::Test
       }
     }
 
-    game_id_hash = @game_worker.place_command(payload_hash)
+    game_id_hash = @game_worker.process_place_command(payload_hash)
 
     assert_equal Hash, game_id_hash.class
     assert_equal '1', game_id_hash[:game_id]

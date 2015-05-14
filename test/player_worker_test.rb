@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'bunny'
-require_relative '../lib/player_worker'
+require_relative '../lib/player_rpc_worker'
 
 class PlayerWorkerTest < MiniTest::Test
 
@@ -9,7 +9,7 @@ class PlayerWorkerTest < MiniTest::Test
     conn           = Bunny.new(automatically_recover: false)
     conn.start
     ch             = conn.create_channel
-    @player_worker = PlayerWorker.new(ch, 'rpc_queue')
+    @player_worker = PlayerRPCWorker.new(ch, 'rpc_queue')
   end
 
   def test_generate_uuid

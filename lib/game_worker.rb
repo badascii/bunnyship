@@ -23,11 +23,12 @@ class GameWorker
       payload_hash = JSON.parse(payload, symbolize_names: true)
       response     = nil
 
-      response = if payload_hash[:command] == 'play'
+      response = case payload_hash[:command]
+                 when 'play'
                    process_play_command(payload_hash)
-                 elsif payload_hash[:command] == 'place'
+                 when 'place'
                    process_place_command(payload_hash)
-                 elsif payload_hash[:command] == 'ready'
+                 when 'ready'
                    'OK'
                  else
                    'INVALID'
