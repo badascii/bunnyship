@@ -34,7 +34,7 @@ puts " [x] Sent input"
 
 if ARGV[0] == 'fire'
   input_hash = {
-    target:  'Jimmy',
+    target:  'Bob',
     name:    'Jimmy',
     x:       1,
     y:       1,

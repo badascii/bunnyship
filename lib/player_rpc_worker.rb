@@ -65,7 +65,11 @@ class PlayerRPCWorker
 
   def build_ready_input_hash(input)
     return {
-      command: input[0]
+      command: input[0],
+      payload: {
+        name:    input[1], # TODO:2015-05-21:Implement individual user ready-up
+        game_id: input[2]
+      }
     }
   end
 

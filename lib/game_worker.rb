@@ -36,7 +36,7 @@ class GameWorker
 
       x.publish(response.to_s, routing_key: properties.reply_to, correlation_id: properties.correlation_id)
 
-      process_ready_command if payload_hash[:command] == 'ready'
+      process_ready_command(payload_hash) if payload_hash[:command] == 'ready'
     end
   end
 
@@ -74,6 +74,8 @@ class GameWorker
   def emit_game_update(game_id, body, x)
     game_update = build_game_update_hash(body)
 
+    puts "Game ID: #{game_id}, sending update - #{game_update}\n"
+
     x.publish(game_update.to_json, routing_key: "games.#{game_id}")
   end
 
@@ -87,15 +89,14 @@ class GameWorker
   end
 
   def bind_all_active_games(q, x)
-    puts 'Binding all games...'
     games.each do |game_id, game|
       q.bind(x, routing_key: game_id)
-      puts "Bound #{game_id}"
+      puts "Bound #{game_id}\n\n"
     end
   end
 
   def add_player_to_game(game, player)
-    @games[game.id].players[player.name] = player
+    @games[game.id].add(player)
   end
 
   def process_play_command(payload_hash)
@@ -105,7 +106,7 @@ class GameWorker
 
     add_player_to_game(game, player)
 
-    puts "#{name} joined game #{game.id}"
+    puts "#{name} joined game #{game.id}\n\n#{game.inspect}\n\n"
 
     return {game_id: game.id}
   end
@@ -113,18 +114,19 @@ class GameWorker
   def process_place_command(payload_hash)
     name         = payload_hash[:payload][:name]
     game_id      = payload_hash[:payload][:game_id]
-    puts payload_hash.inspect
     current_game = @games.fetch(game_id)
     current_game.players[name].ships << place_ship(payload_hash[:payload])
-    puts "#{name} placed #{payload_hash[:payload][:type]} on #{current_game.inspect}"
+    puts "Game ID: #{game_id}, #{name} placed a #{payload_hash[:payload][:type]} at x:#{payload_hash[:payload][:x]} y:#{payload_hash[:payload][:y]}\n\n"
 
     return {game_id: game_id}
   end
 
-  def process_ready_command
-    q = topic_ch.queue('')
-    x = topic_ch.topic('game_updates')
+  def process_ready_command(payload_hash)
+    current_game = games[payload_hash[:payload][:game_id]]
+    q            = topic_ch.queue('')
+    x            = topic_ch.topic('game_updates')
 
+    current_game.update_current_turn
     bind_all_active_games(q, x)
     start_topic(q, x)
   end
