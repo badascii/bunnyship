@@ -18,6 +18,7 @@ class Game
     @players      = opts[:players] || {}
     @turn_order   = []
     @turn_history = []
+    @current_turn = ''
   end
 
   def valid_fleet?(player_ships)
@@ -57,14 +58,17 @@ class Game
   end
 
   def set_turn_order
-    raise ArgumentError.new('Not enough players!') if players.size <= 1
+    # raise ArgumentError.new('Not enough players!') if players.size <= 1
     turn_order.shuffle
   end
 
+  def update_current_turn
+    self.current_turn = turn_order.first
+  end
+
   def switch_turns
-    current_player = turn_order.shift
-    turn_order << current_player
-    current_turn = current_player
+    turn_order.rotate!
+    update_current_turn
   end
 
 end
